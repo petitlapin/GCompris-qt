@@ -291,13 +291,13 @@ bool DownloadManager::download(DownloadJob* job)
     QDir dir;
     if (!dir.exists(fi.path()) && !dir.mkpath(fi.path())) {
         qDebug() << "Could not create resource path " << fi.path();
-        emit error(QNetworkReply::InternalServerError, "Could not create resource path");
+        emit error(QNetworkReply::ProtocolUnknownError, "Could not create resource path");
         return false;
     }
 
     job->file.setFileName(tempFilenameForFilename(fi.filePath()));
     if (!job->file.open(QIODevice::WriteOnly)) {
-        emit error(QNetworkReply::InternalServerError,
+        emit error(QNetworkReply::ProtocolUnknownError,
                 QString("Could not open target file %1").arg(job->file.fileName()));
         return false;
     }

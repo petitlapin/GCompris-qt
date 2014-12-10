@@ -68,13 +68,14 @@ install(TARGETS ${GCOMPRIS_EXECUTABLE_NAME}
   LIBRARY DESTINATION lib
   BUNDLE DESTINATION .)
 
+if(BUILD_STANDALONE)
 # Qt plugins to install
-set(_qt_plugins Qt5::QJpegPlugin)
+set(_qt_plugins)# Qt5::QJpegPlugin)
 if(APPLE)
   list(APPEND _qt_plugins Qt5::QTgaPlugin Qt5::QTiffPlugin Qt5::QCocoaIntegrationPlugin)
 elseif(WIN32)
   list(APPEND _qt_plugins Qt5::QWindowsIntegrationPlugin)
-elseif(UNIX AND NOT ANDROID)
+elseif(UNIX AND NOT ANDROID AND NOT SAILFISHOS)
   list(APPEND _qt_plugins Qt5::QXcbIntegrationPlugin)
 endif()
 
@@ -86,7 +87,7 @@ else()
 endif()
 
 set(_qt_plugins2 imageformats/${_lib_prefix}qsvg)
-if(UNIX AND NOT ANDROID)
+if(UNIX AND NOT ANDROID AND NOT SAILFISHOS)
   list(APPEND _qt_plugins2 mediaservice/${_lib_prefix}gstaudiodecoder
     mediaservice/${_lib_prefix}gstcamerabin
     mediaservice/${_lib_prefix}gstmediacapture
@@ -94,15 +95,15 @@ if(UNIX AND NOT ANDROID)
 endif()
 
 set(_qml_plugins
-  QtQuick/Controls/${_lib_prefix}qtquickcontrolsplugin
+#  QtQuick/Controls/${_lib_prefix}qtquickcontrolsplugin
   QtQuick/Window.2/${_lib_prefix}windowplugin
   QtQuick/Particles.2/${_lib_prefix}particlesplugin
-  QtQuick/Layouts/${_lib_prefix}qquicklayoutsplugin
-  QtQuick/Dialogs/${_lib_prefix}dialogplugin
+#  QtQuick/Layouts/${_lib_prefix}qquicklayoutsplugin
+#  QtQuick/Dialogs/${_lib_prefix}dialogplugin
   QtQuick.2/${_lib_prefix}qtquick2plugin
   QtMultimedia/${_lib_prefix}declarative_multimedia)
 
-if(NOT WIN32)
+if(NOT WIN32 AND NOT SAILFISHOS)
   list(APPEND QtAudioEngine/${_lib_prefix}declarative_audioengine)
 endif()
 
@@ -155,9 +156,9 @@ foreach(_plugin ${_qml_plugins})
 endforeach()
 
 # install QtGraphicalEffects (which is not a lib but only qml files)
-set(_qml_subdir QtGraphicalEffects)
-getQtQmlPath(_qt_qml_path)
-install(DIRECTORY ${_qt_qml_path}/QtGraphicalEffects DESTINATION ${_qt_qml_destdir})
+#set(_qml_subdir QtGraphicalEffects)
+#getQtQmlPath(_qt_qml_path)
+#install(DIRECTORY ${_qt_qml_path}/QtGraphicalEffects DESTINATION ${_qt_qml_destdir})
 
 # Hack: do not fixup Qt and Qml plugins on Windows because fixup_bundle takes ages (cmake bug ?)
 if(WIN32)
@@ -165,16 +166,14 @@ if(WIN32)
 endif()
 
 # install fixup_bundle script to resolve and fixup runtime dependencies
-# FIXME commented as it breaks KDE jenkins, seems to be MacOSX specific
-# This should not be triggered at make install but only on make package
 #configure_file(${CMAKE_SOURCE_DIR}/cmake/FixBundle.cmake.in FixBundle.cmake)
 #install(SCRIPT ${CMAKE_CURRENT_BINARY_DIR}/FixBundle.cmake)
 
 # install a startup script for linux bundle
-if(UNIX)
+if(UNIX AND NOT SAILFISHOS)
   install(PROGRAMS ../../tools/gcompris-qt.sh DESTINATION bin)
 endif()
-
+endif(BUILD_STANDALONE)
 # Packaging
 # =========
 
@@ -202,6 +201,19 @@ if(APPLE)
   set(CPACK_DMG_BACKGROUND_IMAGE "${GCOMPRIS_RESOURCES}/dmg_background.png")
 elseif(WIN32)
   set(CPACK_GENERATOR "NSIS")
+elseif(BUILD_RPM)
+  install(FILES ${PROJECT_SOURCE_DIR}/installer/harbour-gcompris-qt.desktop DESTINATION share/applications)
+  install(FILES ${PROJECT_SOURCE_DIR}/installer/harbour-gcompris-qt.png DESTINATION share/icons/hicolor/86x86/apps)
+  set(CPACK_RPM_PACKAGE_SUMMARY "gcompris-qt")
+  set(CPACK_RPM_PACKAGE_ARCHITECTURE "armv7hl")
+  set(CPACK_RPM_PACKAGE_NAME "${GCOMPRIS_EXECUTABLE_NAME}")
+  set(CPACK_RPM_PACKAGE_VERSION "${GCOMPRIS_VERSION}")
+  set(CPACK_RPM_PACKAGE_LICENSED "GPL-3")
+  set(CPACK_RPM_PACKAGE_URL "https://www.gcompris.org")
+  set(CPACK_RPM_PACKAGE_DESCRIPTION "GCompris description")
+  set(CMAKE_INSTALL_PREFIX "/usr")
+  set(CPACK_PACKAGING_INSTALL_PREFIX "/usr")
+  set(CPACK_GENERATOR "RPM")
 else()
   set(CPACK_GENERATOR "STGZ")
 endif()
