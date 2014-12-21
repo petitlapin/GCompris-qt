@@ -183,7 +183,6 @@ if(BUILD_STANDALONE)
   if(UNIX)
     install(PROGRAMS ../../tools/gcompris-qt.sh DESTINATION bin)
   endif()
-endif()
 endif(BUILD_STANDALONE)
 # Packaging
 # =========
