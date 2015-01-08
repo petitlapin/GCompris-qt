@@ -93,6 +93,10 @@ else(ANDROID)
   set(GCOMPRIS_RCC_DIR ${CMAKE_BINARY_DIR}/${_data_dest_dir}/rcc CACHE INTERNAL "" FORCE)
 endif(ANDROID)
 
+if(UBUNTU_CLICK)
+  add_subdirectory(platforms/ubuntu)
+endif(UBUNTU_CLICK)
+
 # Always create these folders
 add_custom_command(
   OUTPUT shareFolders

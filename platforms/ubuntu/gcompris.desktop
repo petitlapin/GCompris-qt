@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=gcompris-qt
+Exec=bin/gcompris-qt
+Icon=GCompris256.png
+Terminal=false
+Type=Application
+X-Ubuntu-Touch=true
+
+X-Ubuntu-Splash-Show-Header=true
+X-Ubuntu-Splash-Title=gcompris-qt
