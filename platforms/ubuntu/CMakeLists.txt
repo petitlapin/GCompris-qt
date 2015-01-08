@@ -14,7 +14,12 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/manifest.json.cmake ${CMAKE_BINARY_DI
 add_custom_command (
   OUTPUT createClickPackage
   DEPENDS ${CMAKE_BINARY_DIR}/manifest.json
+  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/gcompris.desktop ${CMAKE_BINARY_DIR}/gcompris.desktop
+  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/apparmor.json ${CMAKE_BINARY_DIR}/apparmor.json
+  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/.excludes ${CMAKE_BINARY_DIR}/.excludes
+  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/gcompris256.png ${CMAKE_BINARY_DIR}/gcompris256.png
   COMMAND ${CLICK_EXEC} build .
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )
 
 # Command to create apk from Makefile
