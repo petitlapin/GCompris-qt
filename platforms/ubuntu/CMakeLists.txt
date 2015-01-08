@@ -15,6 +15,7 @@ add_custom_command (
   OUTPUT createClickPackage
   DEPENDS ${CMAKE_BINARY_DIR}/manifest.json
   COMMAND ${CLICK_EXEC} build .
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )
 
 # Command to create apk from Makefile
