@@ -1,5 +1,5 @@
 {
-    "architecture": "any",
+    "architecture": "armhf",
     "description": "gcompris games for children",
     "framework": "ubuntu-sdk-14.10",
     "hooks": {
