@@ -9,7 +9,7 @@
         }
     },
     "maintainer": "Michael Hall <mhall119@ubuntu.com>",
-    "name": "com.ubuntu.developer.mhall119.gcompris",
+    "name": "@GCOMPRIS_EXECUTABLE_NAME@",
     "title": "gcompris",
     "version": "@GCOMPRIS_VERSION_CODE@"
 }

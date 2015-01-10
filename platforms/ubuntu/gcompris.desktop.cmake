@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=gcompris-qt
-Exec=bin/gcompris-qt
-Icon=GCompris256.png
+Exec=bin/@GCOMPRIS_EXECUTABLE_NAME@
+Icon=gcompris256.png
 Terminal=false
 Type=Application
 X-Ubuntu-Touch=true

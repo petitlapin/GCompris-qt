@@ -82,10 +82,15 @@ static const QString SECTION_VISIBLE = "sectionVisible";
 
 ApplicationSettings *ApplicationSettings::m_instance = NULL;
 
+#ifdef UBUNTU
+ApplicationSettings::ApplicationSettings(QObject *parent): QObject(parent),
+	 m_config(QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) +
+			  GCOMPRIS_APPLICATION_NAME + ".conf", QSettings::IniFormat)
+#else
 ApplicationSettings::ApplicationSettings(QObject *parent): QObject(parent),
 	 m_config(QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) +
 			  "/gcompris/" + GCOMPRIS_APPLICATION_NAME + ".conf", QSettings::IniFormat)
-
+#endif
 {
     // initialize from settings file or default
 
