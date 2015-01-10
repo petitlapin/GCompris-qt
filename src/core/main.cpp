@@ -96,9 +96,15 @@ int main(int argc, char *argv[])
     bool isFullscreen = true;
     {
         // Local scope for config
+#ifdef UBUNTU
+        QSettings config(QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) +
+                         GCOMPRIS_APPLICATION_NAME + ".conf",
+                         QSettings::IniFormat);
+#else
         QSettings config(QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) +
                          "/gcompris/" + GCOMPRIS_APPLICATION_NAME + ".conf",
                          QSettings::IniFormat);
+#endif
         // Get locale
         if(config.contains("General/locale")) {
             locale = config.value("General/locale").toString();
