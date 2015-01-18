@@ -364,7 +364,8 @@ inline QString DownloadManager::getResourceRootForFilename(const QString& filena
  */
 inline QString  DownloadManager::getSystemDownloadPath() const
 {
-    return QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+    return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) +
+        "/" + GCOMPRIS_APPLICATION_NAME;
 }
 
 /** Get all paths that are used for storing resources
