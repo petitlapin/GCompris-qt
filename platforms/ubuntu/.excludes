@@ -1,7 +1,0 @@
-CMakeFiles/*
-platforms/*
-src/*
-Makefile
-CPack*
-CMake*
-cmake*

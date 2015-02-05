@@ -5,7 +5,7 @@ find_program(CLICK_EXEC NAMES click)
 ADD_DEFINITIONS(-DUBUNTU)
 # Look for click program
 if (NOT CLICK_EXEC)
-  message(FATAL_ERROR "Could not find click to build .click package.")
+#  message(FATAL_ERROR "Could not find click to build .click package.")
 endif(NOT CLICK_EXEC)
 
 # TODO see if needed
@@ -21,6 +21,11 @@ add_custom_command (
   COMMAND ${CLICK_EXEC} build .
   WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )
+
+install(FILES ${CMAKE_BINARY_DIR}/gcompris.desktop DESTINATION .)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/gcompris256.png DESTINATION .)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/apparmor.json DESTINATION .)
+install(FILES ${CMAKE_BINARY_DIR}/manifest.json DESTINATION .)
 
 # Command to create apk from Makefile
 add_custom_target (click_package
