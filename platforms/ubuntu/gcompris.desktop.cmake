@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=gcompris-qt
-Exec=bin/@GCOMPRIS_EXECUTABLE_NAME@
+Exec=lib/arm-linux-gnueabihf/bin/@GCOMPRIS_EXECUTABLE_NAME@
 Icon=gcompris256.png
 Terminal=false
 Type=Application
