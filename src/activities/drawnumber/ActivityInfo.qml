@@ -2,10 +2,10 @@ import GCompris 1.0
 
 ActivityInfo {
   name: "drawnumber/Drawnumber.qml"
-  difficulty: 1
+  difficulty: 2
   icon: "drawnumber/drawnumber.svg"
   author: "Emmanuel Charruau <echarruau@gmail.com>"
-  demo: false
+  demo: true
   title: qsTr("Number sequence")
   description: qsTr("Touch the numbers in the right sequence.")
 //  intro: "Draw the picture by touching each number in the right sequence."

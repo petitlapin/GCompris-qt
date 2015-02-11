@@ -21,6 +21,7 @@
 */
 import QtQuick 2.1
 import GCompris 1.0
+import "."
 
 import "../../core"
 import "enumerate.js" as Activity
@@ -77,6 +78,7 @@ ActivityBase {
         }
 
         Column {
+            id: answer
             anchors {
                 right: parent.right
                 bottom: keyboard.top
@@ -94,8 +96,24 @@ ActivityBase {
                     imgPath: modelData
                     focus: true
                     backspaceCode: keyboard.backspace
+                    audioEffects: activity.audioEffects
                 }
             }
+
+            add: Transition {
+                NumberAnimation { properties: "x,y"; duration: 200 }
+            }
+        }
+
+        // Reposition the items to find when whidh or height changes
+        onWidthChanged: {
+            for(var i in itemList.model)
+                itemList.itemAt(i).positionMe()
+        }
+
+        onHeightChanged: {
+            for(var i in itemList.model)
+                itemList.itemAt(i).positionMe()
         }
 
         Repeater
@@ -113,8 +131,6 @@ ActivityBase {
             anchors.bottom: parent.bottom
             anchors.horizontalCenter: parent.horizontalCenter
 
-            keyHeight: 35 * ApplicationInfo.ratio
-            equalKeyWidth: true
             layout: [ [
                     { label: "0" },
                     { label: "1" },
@@ -153,9 +169,6 @@ ActivityBase {
         Bonus {
             id: bonus
             Component.onCompleted: win.connect(Activity.nextLevel)
-            onWin: {
-                activity.audioEffects.play("qrc:/gcompris/src/core/resource/sounds/bonus.wav")
-            }
         }
     }
 }

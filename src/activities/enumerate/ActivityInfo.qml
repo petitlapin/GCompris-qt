@@ -2,10 +2,10 @@ import GCompris 1.0
 
 ActivityInfo {
     name: "enumerate/Enumerate.qml"
-    difficulty: 1
+    difficulty: 2
     icon: "enumerate/enumerate.svg"
     author: "Thib ROMAIN <thibrom@gmail.com>"
-    demo: false
+    demo: true
     title: qsTr("Count the items")
     description: qsTr("Place the items in the best way to count them")
 //  intro: "Count the elements by organising them then type the answer on your keyboard."

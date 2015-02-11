@@ -2,10 +2,10 @@ import GCompris 1.0
 
 ActivityInfo {
   name: "align4-2players/Align42players.qml"
-  difficulty: 1
+  difficulty: 2
   icon: "align4-2players/align4-2players.svg"
   author: "Bharath M S <brat.197@gmail.com>"
-  demo: false
+  demo: true
   title: qsTr("Align four (two players)")
   description: qsTr("Arrange four tokens in a row")
 //  intro: "Click on the column where you wish your token to fall and try to align 4 tokens to win."

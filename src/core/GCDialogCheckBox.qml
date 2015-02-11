@@ -21,7 +21,6 @@
 import QtQuick 2.2
 import QtQuick.Controls 1.1
 import QtQuick.Controls.Styles 1.1
-import QtQuick.Dialogs 1.2
 import GCompris 1.0
 import QtQuick.Layouts 1.1
 
@@ -39,7 +38,7 @@ CheckBox {
                                   "qrc:/gcompris/src/core/resource/cancel.svgz"
         }
         label: GCText {
-            font.pointSize: 16
+            fontSize: mediumSize
             text: control.text
             wrapMode: Text.WordWrap
             width: parent.parent.width - 50 * ApplicationInfo.ratio - 10 * 2

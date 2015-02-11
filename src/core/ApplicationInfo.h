@@ -59,8 +59,10 @@ class ApplicationInfo : public QObject
 	Q_PROPERTY(int applicationWidth READ applicationWidth WRITE setApplicationWidth NOTIFY applicationWidthChanged)
     Q_PROPERTY(Platform platform READ platform CONSTANT)
     Q_PROPERTY(bool isMobile READ isMobile CONSTANT)
+    Q_PROPERTY(bool hasShader READ hasShader CONSTANT)
     Q_PROPERTY(bool isPortraitMode READ isPortraitMode WRITE setIsPortraitMode NOTIFY portraitModeChanged)
 	Q_PROPERTY(qreal ratio READ ratio NOTIFY ratioChanged)
+    Q_PROPERTY(qreal fontRatio READ fontRatio NOTIFY fontRatioChanged)
 	Q_PROPERTY(qreal hMargin READ hMargin NOTIFY hMarginChanged)
 	Q_PROPERTY(qreal sliderHandleWidth READ sliderHandleWidth NOTIFY ratioChanged)
 	Q_PROPERTY(qreal sliderHandleHeight READ sliderHandleHeight NOTIFY ratioChanged)
@@ -106,23 +108,38 @@ public:
 	bool isPortraitMode() const { return m_isPortraitMode; }
 	void setIsPortraitMode(const bool newMode);
 
-	bool isMobile() const { return m_isMobile; }
+    bool isMobile() const { return m_isMobile; }
+
+    // On some platforms shader crashes, let's put them back when we
+    // know how to detect the platforms that support it
+    // https://bugreports.qt.io/browse/QTBUG-44194
+    bool hasShader() const { return false; }
 
 	qreal hMargin() const { return m_hMargin; }
 	qreal ratio() const { return m_ratio; }
+    qreal fontRatio() const { return m_fontRatio; }
 	qreal sliderHandleHeight()  { return m_sliderHandleHeight; }
 	qreal sliderGapWidth()  { return m_sliderGapWidth; }
 	qreal sliderHandleWidth()  { return m_sliderHandleWidth; }
 
+    // return the short locale name for the given locale.
+    // If 'defaut' is passed then return the short locale for the system locale
     // Can't use left(2) because of Asturian where there are 3 chars
     static QString localeShort(const QString &locale) {
-        return locale.left(locale.indexOf('_'));
+        QString _locale = locale;
+        if(_locale == GC_DEFAULT_LOCALE) {
+            _locale = QLocale::system().name();
+        }
+        return _locale.left(_locale.indexOf('_'));
     }
+    // return the short locale name for the current config
     QString localeShort() const {
         return localeShort( ApplicationSettings::getInstance()->locale() );
     }
     static QString GCVersion() { return VERSION; }
     static QString QTVersion() { return qVersion(); }
+
+    Q_INVOKABLE QString getVoicesLocale(const QString &locale);
 
 protected slots:
 	void notifyPortraitMode();
@@ -133,6 +150,7 @@ protected slots:
     Q_INVOKABLE QStringList getSystemExcludedFonts();
     Q_INVOKABLE QStringList getFontsFromRcc();
     Q_INVOKABLE void notifyFullscreenChanged();
+    Q_INVOKABLE void screenshot(const QString &file);
 
 
 protected:
@@ -143,6 +161,7 @@ signals:
 	void portraitModeChanged();
 	void hMarginChanged();
 	void ratioChanged();
+    void fontRatioChanged();
     void applicationSettingsChanged();
     void fullscreenChanged();
 
@@ -155,6 +174,7 @@ private:
 	bool m_isPortraitMode;
 	bool m_isMobile;
 	qreal m_ratio;
+    qreal m_fontRatio;
 	qreal m_hMargin;
 	qreal m_sliderHandleHeight, m_sliderHandleWidth, m_sliderGapWidth;
 

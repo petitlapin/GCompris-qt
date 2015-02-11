@@ -22,6 +22,7 @@
 import QtQuick 2.1
 import GCompris 1.0
 
+import "."
 import "../../core"
 import "memory.js" as Activity
 
@@ -34,7 +35,7 @@ ActivityBase {
     property bool withTux: false
     property string additionnalPath
 
-    onStart: {}
+    onStart: focus = true
     onStop: {}
 
     pageComponent: Image {
@@ -58,8 +59,11 @@ ActivityBase {
             id: items
             property alias bar: bar
             property alias bonus: bonus
+            property GCAudio audioEffects: activity.audioEffects
             property bool withTux: activity.withTux
             property bool tuxTurn: false
+            property var playQueue
+            property int selectionCount
             property int tuxScore: tuxScore.text
             property int playerScore: playerScore.text
             property variant dataset: activity.dataset
@@ -100,7 +104,19 @@ ActivityBase {
                     width: (background.width - (grid.columns + 1) * grid.spacing) / grid.columns
                     height: (background.height - (grid.rows + 1) * grid.spacing) / (grid.rows + 0.5)
                     audioVoices: activity.audioVoices
+                    audioEffects: activity.audioEffects
                }
+            }
+            add: Transition {
+                PathAnimation {
+                    path: Path {
+                        PathCurve { x: background.width / 3}
+                        PathCurve { y: background.height / 3}
+                        PathCurve {}
+                    }
+                    easing.type: Easing.InOutQuad
+                    duration: 2000
+                }
             }
         }
 
@@ -137,7 +153,7 @@ ActivityBase {
                 anchors.verticalCenterOffset: parent.height / 6
                 color: "black"
                 font.bold: true
-                font.pointSize: 24
+                fontSize: largeSize
                 style: Text.Outline
                 styleColor: "white"
                 text: items.playerScore
@@ -147,7 +163,7 @@ ActivityBase {
         Image {
             id: tux
             visible: activity.withTux
-            source: 'qrc:/gcompris/src/activities/memory/resource/tux-teacher.png'
+            source: 'qrc:/gcompris/src/activities/memory/resource/tux-teacher.svg'
             anchors {
                 bottom: bar.bottom
                 right: player.left
@@ -162,7 +178,7 @@ ActivityBase {
                 anchors.verticalCenterOffset: parent.height / 6
                 color: "black"
                 font.bold: true
-                font.pointSize: 24
+                fontSize: largeSize
                 style: Text.Outline
                 styleColor: "white"
                 text: items.tuxScore

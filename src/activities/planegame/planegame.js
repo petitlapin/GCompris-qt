@@ -46,7 +46,7 @@ var clouds = new Array;
 var cloudsErased = new Array;
 
 function start(items_, dataset_) {
-    Core.checkForVoices(items_.bar);
+    Core.checkForVoices(items_.background);
 
     items = items_
     dataset = dataset_
@@ -298,8 +298,7 @@ function handleCollisionsWithCloud() {
 
                     if(currentSubLevel === numberOfSubLevels) {
                         /* Try the next level */
-                        nextLevel()
-                        items.audioEffects.play("qrc:/gcompris/src/core/resource/sounds/bonus.wav")
+                        items.bonus.good("flower")
                     } else {
                         items.score.message = dataset[currentLevel].data[currentSubLevel]
                     }

@@ -43,7 +43,7 @@ Item {
 
     onWon: {
         wonState = true
-        particle.emitter.burst(30)
+        particle.burst(30)
         dropShadow.opacity = 0
         fadeout.restart();
     }
@@ -96,7 +96,7 @@ Item {
         // FIXME, the size should be passed from the caller
         sourceSize.height: 106 * ApplicationInfo.ratio
 
-        ParticleSystemStar {
+        ParticleSystemStarLoader {
             id: particle
             clip: false
         }
@@ -123,6 +123,7 @@ Item {
 
         onStopped: {
             Activity.audioCrashPlay();
+            Activity.appendRandomWord(word.text)
             Activity.deleteWord(word);
         }
     }

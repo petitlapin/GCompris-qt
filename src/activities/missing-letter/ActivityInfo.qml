@@ -3,10 +3,10 @@ import GCompris 1.0
 ActivityInfo
 {
   name: "missing-letter/MissingLetter.qml"
-  difficulty: 1
+  difficulty: 2
   icon: "missing-letter/missing-letter.svg"
   author: "Amit Tomar <a.tomar@outlook.com>"
-  demo: false
+  demo: true
   title: qsTr("Missing Letter")
   description: ""
 //  intro: "Find the missing letter and complete the word by clicking on one of the letters proposed on the side."

@@ -87,7 +87,7 @@ Item {
 
     Component {
         id: particle
-        ParticleSystemStar
+        ParticleSystemStarLoader
         {
             id: particles
             clip: false
@@ -100,9 +100,9 @@ Item {
             canvas.opacity = 0
             isTouched = true
             strawberry.source = Activity.url + "strawberry.svgz"
-            audioEffects.play("qrc:/gcompris/src/activities/clickgame/resource/drip.wav")
+            audioEffects.play("qrc:/gcompris/src/core/resource/sounds/win.wav")
             Activity.strawberryFound()
-            particleLoader.item.emitter.burst(40)
+            particleLoader.item.burst(40)
         } else {
             hexagon.color =
                     Activity.getColor(Activity.getDistance(hexagon.ix, hexagon.iy))

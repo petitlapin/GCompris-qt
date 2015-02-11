@@ -2,6 +2,7 @@ import GCompris 1.0
 
 ActivityInfo {
   name: "menu/Menu.qml"
+  difficulty: 0
   title: qsTr("GCompris Main Menu")
   description: qsTr("Select an activity to run it.")
   goal: qsTr("GCompris is a high quality educational software suite comprising of numerous activities for children aged 2 to 10.")
@@ -18,7 +19,7 @@ The following icons are displayed from right to left.
     Tux Plane - About GCompris
     Quit - Quit GCompris (ctrl-q)
 The stars show suitable age groups for each game:
-    1, 2 or 3 simple stars  - from 2 to 6 years old
+    1, 2 or 3 simple stars - from 2 to 6 years old
     1, 2 or 3 complex stars - 7 years and up
 Shortcuts:
     ctrl-b Show or Hide the control bar

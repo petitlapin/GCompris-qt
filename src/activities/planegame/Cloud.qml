@@ -43,7 +43,7 @@ Image {
     signal touch
 
     onDone: {
-        particles.emitter.burst(50)
+        particles.burst(50)
         opacityTimer.start()
     }
 
@@ -58,7 +58,7 @@ Image {
         anchors.verticalCenter: cloud.verticalCenter
         color: "black"
         font.bold: true
-        font.pointSize: 18
+        fontSize: 18
     }
 
     Component.onCompleted: {
@@ -105,7 +105,7 @@ Image {
         onTriggered: opacity = 0
     }
 
-    ParticleSystemStar {
+    ParticleSystemStarLoader {
         id: particles
         anchors.fill: parent
         clip: false
