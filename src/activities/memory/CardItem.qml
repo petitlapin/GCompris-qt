@@ -36,6 +36,7 @@ Flipable {
     property bool tuxTurn
 
     property GCAudio audioVoices
+    property GCAudio audioEffects
 
     onIsFoundChanged: {
         opacity = 0
@@ -47,18 +48,19 @@ Flipable {
         interval: 100
         running: false
         repeat: false
-        onTriggered: particles.emitter.burst(50)
+        onTriggered: particles.burst(50)
     }
 
-    ParticleSystemStar {
+    ParticleSystemStarLoader {
         id: particles
-        anchors.fill: parent
         clip: false
     }
 
     Timer {
         id: animationTimer
-        interval: 750; running: false; repeat: false
+        interval: items.tuxTurn ? 1500 : 750
+        running: false
+        repeat: false
         onTriggered: selectionReady()
     }
 
@@ -70,12 +72,14 @@ Flipable {
         anchors.centerIn: parent
         Image {
             source: card.pairData.image
+            sourceSize.width: parent.width
+            sourceSize.height: parent.height
             anchors.centerIn: parent
             fillMode: Image.PreserveAspectFit
         }
         GCText {
             anchors.centerIn: parent
-            font.pointSize: 24
+            fontSize: largeSize
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             color: "black"
@@ -110,19 +114,24 @@ Flipable {
 
     MouseArea {
         anchors.fill: parent
-        enabled: card.isBack && !card.isFound && !card.tuxTurn
+        enabled: card.isBack && !card.isFound && !card.tuxTurn && items.selectionCount < 2
         onClicked: selected()
     }
 
     function selected() {
-        Activity.reverseCards()
         card.isBack = false
         card.isShown = true
+        items.selectionCount++
         animationTimer.start()
+        audioEffects.play(Activity.url + "card_flip.wav")
     }
 
     function selectionReady() {
-        Activity.cardClicked(card)
+        var pairs = Activity.addPlayQueue(card)
+        var win = Activity.reverseCardsIfNeeded()
+        if(tuxTurn && win || tuxTurn && !pairs)
+            Activity.tuxPlay()
+
         if (card.pairData.sound) {
             audioVoices.play(card.pairData.sound)
         }

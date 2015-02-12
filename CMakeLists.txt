@@ -18,7 +18,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${my_cxx_flags}")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${my_cxx_flags}")
 
 set(GCOMPRIS_MAJOR_VERSION 0)
-set(GCOMPRIS_MINOR_VERSION 23)
+set(GCOMPRIS_MINOR_VERSION 27)
 set(GCOMPRIS_PATCH_VERSION 0)
 
 set(GCOMPRIS_VERSION ${GCOMPRIS_MAJOR_VERSION}.${GCOMPRIS_MINOR_VERSION})
@@ -131,11 +131,17 @@ foreach(PoSource ${TRANSLATIONS_FILES})
   # qm filename
   string(REPLACE ".ts" ".qm" QmOutput ${TsSource})
 
+  set(OutTsFile ${CMAKE_BINARY_DIR}/tmp/${TsSource})
   add_custom_command(
     OUTPUT ${QmOutput}
     COMMAND cmake -E make_directory ${GCOMPRIS_TRANSLATIONS_DIR}
     COMMAND cmake -E make_directory ${CMAKE_BINARY_DIR}/tmp
-    COMMAND lconvert -if po -of qm -i ${CMAKE_SOURCE_DIR}/${PoSource} -o ${GCOMPRIS_TRANSLATIONS_DIR}/${QmOutput}
+    # Remove the obsolete translations and set po in the ts output file
+    COMMAND msgattrib --no-obsolete  ${CMAKE_CURRENT_SOURCE_DIR}/${PoSource} -o ${OutTsFile}
+    # Convert the po into ts
+    COMMAND lconvert -if po -of ts -i ${OutTsFile} -o ${OutTsFile}
+    # Convert the ts in qm removing non finished translations
+    COMMAND lrelease -compress -nounfinished ${OutTsFile} -qm ${GCOMPRIS_TRANSLATIONS_DIR}/${QmOutput}
     )
   list(APPEND QM_FILES ${QmOutput})
 endforeach()
@@ -163,6 +169,7 @@ else()
 endif()
 
 option(WITH_ACTIVATION_CODE "Include the activation system" OFF)
+option(WITH_KIOSK_MODE "Set the kiosk mode by default" OFF)
 
 add_subdirectory(src)
 

@@ -1,4 +1,4 @@
-/* GCompris - Word.qml
+/* GCompris - FallingDomino.qml
  *
  * Copyright (C) 2014 Holger Kaelberer
  *
@@ -43,7 +43,7 @@ Item {
 
     onWon: {
         wonState = true
-        particle.emitter.burst(30)
+        particle.burst(30)
         fadeout.restart();
     }
 
@@ -99,7 +99,7 @@ Item {
         value2: dominoValues[1]
         isClickable: false
 
-        ParticleSystemStar {
+        ParticleSystemStarLoader {
             id: particle
             clip: false
         }
@@ -114,6 +114,7 @@ Item {
 
         onStopped: {
             Activity.audioCrashPlay();
+            Activity.appendRandomWord(word.text)
             Activity.deleteWord(word);
         }
     }

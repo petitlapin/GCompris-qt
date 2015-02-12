@@ -34,13 +34,13 @@ Item {
     property var rightPanelComponent: rightPanel
     property var backspaceButtonComponent:backspaceButton
     property int maxDigit: 2
-    property int columnWidth: 80
+    property int columnWidth: 80 * ApplicationInfo.ratio
 
     signal answer
 
     Column {
         id: leftPanel
-        width: columnWidth * ApplicationInfo.ratio
+        width: columnWidth
         height: parent.height - 90 * ApplicationInfo.ratio
         opacity: 0.8
 
@@ -54,11 +54,11 @@ Item {
                 border.color: Qt.darker(color)
                 border.width:2
 
-                Text{
+                GCText {
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.verticalCenter: parent.verticalCenter
                     text: numbers[index]
-                    font.pointSize: 28
+                    fontSize: 28
                     font.bold: true
 
                 }
@@ -95,9 +95,9 @@ Item {
 
     Column {
         id: rightPanel
-        width: columnWidth * ApplicationInfo.ratio
+        width: columnWidth
         height: parent.height - 90 * ApplicationInfo.ratio
-        x: parent.width - columnWidth * ApplicationInfo.ratio
+        x: parent.width - columnWidth
         opacity: 0.8
 
         Repeater {
@@ -114,7 +114,7 @@ Item {
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.verticalCenter: parent.verticalCenter
                     text: numbers[index] + 5
-                    font.pointSize: 28
+                    fontSize: 28
                     font.bold: true
 
                 }
@@ -156,7 +156,7 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 text: "←"
-                font.pointSize: 28
+                fontSize: 28
                 font.bold: true
             }
 

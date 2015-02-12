@@ -131,7 +131,8 @@ ActivityBase {
             id: drop
             target: fallingPiece
             properties: "y"
-            duration: 1500
+            duration: 720
+            onStarted: activity.audioEffects.play(Activity.url + 'slide.wav')
             onStopped: {
                 dynamic.display()
                 Activity.continueGame()
@@ -197,7 +198,7 @@ ActivityBase {
                 anchors.verticalCenter: parent.verticalCenter
                 x: parent.width / 2 + 5
                 color: "white"
-                font.pointSize: 24
+                fontSize: largeSize
             }
         }
 
@@ -217,7 +218,7 @@ ActivityBase {
                 anchors.verticalCenter: parent.verticalCenter
                 color: "white"
                 x: parent.width / 2 + 5
-                font.pointSize: 24
+                fontSize: largeSize
             }
         }
 

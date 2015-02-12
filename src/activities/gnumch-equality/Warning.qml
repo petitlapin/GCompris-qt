@@ -130,10 +130,10 @@ Rectangle {
         anchors.fill: parent
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
-        text: fault + "<br>" + qsTr("Press &lt;Return&gt; or click on me to continue.")
+        text: fault + "<br>" + qsTr("Press \"Return\" or click on me to continue.")
         fontSizeMode: Text.Fit
         minimumPointSize: 10
-        font.pointSize: 28
+        fontSize: 28
         wrapMode: Text.WordWrap
     }
 

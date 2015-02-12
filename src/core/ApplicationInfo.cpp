@@ -46,6 +46,8 @@
 #include <QtCore/QLocale>
 #include <QtQuick/QQuickWindow>
 #include "ApplicationInfo.h"
+
+#include <qmath.h>
 #include <QDebug>
 
 #include <QFontDatabase>
@@ -77,7 +79,18 @@ ApplicationInfo::ApplicationInfo(QObject *parent): QObject(parent)
 #endif
 
     QRect rect = qApp->primaryScreen()->geometry();
+//    m_ratio = 2;
+//    m_ratio = 2.56;
     m_ratio = m_isMobile ? qMin(qMax(rect.width(), rect.height())/800. , qMin(rect.width(), rect.height())/520.) : 1;
+    // calculate a factor for font-scaling, cf.
+    // http://doc.qt.io/qt-5/scalability.html#calculating-scaling-ratio
+    qreal refDpi = 216.;
+    qreal refHeight = 1776.;
+    qreal refWidth = 1080.;
+    qreal height = qMax(rect.width(), rect.height());
+    qreal width = qMin(rect.width(), rect.height());
+    qreal dpi = qApp->primaryScreen()->logicalDotsPerInch();
+    m_fontRatio = m_isMobile ? qMax(1.0, qMin(height*refDpi/(dpi*refHeight), width*refDpi/(dpi*refWidth))) : 1;
     m_sliderHandleWidth = getSizeWithRatio(70);
     m_sliderHandleHeight = getSizeWithRatio(87);
     m_sliderGapWidth = getSizeWithRatio(100);
@@ -95,6 +108,7 @@ ApplicationInfo::ApplicationInfo(QObject *parent): QObject(parent)
     // Get fonts from rcc
     const QStringList fontFilters = {"*.otf", "*.ttf"};
     m_fontsFromRcc = QDir(":/gcompris/src/core/resource/fonts").entryList(fontFilters);
+
 }
 
 ApplicationInfo::~ApplicationInfo()
@@ -126,10 +140,10 @@ QString ApplicationInfo::getFilePath(const QString &file)
 
 QString ApplicationInfo::getAudioFilePath(const QString &file)
 {
-    QString localeShortName = localeShort();
+    QString localeName = getVoicesLocale(ApplicationSettings::getInstance()->locale());
 
     QString filename = file;
-    filename.replace("$LOCALE", localeShortName);
+    filename.replace("$LOCALE", localeName);
     return getResourceDataPath() + "/" + filename;
 }
 
@@ -178,12 +192,33 @@ void ApplicationInfo::setWindow(QQuickWindow *window)
     m_window = window;
 }
 
+void ApplicationInfo::screenshot(QString const &path)
+{
+    QImage img = m_window->grabWindow();
+    img.save(path);
+}
+
 void ApplicationInfo::notifyFullscreenChanged()
 {
     if(ApplicationSettings::getInstance()->isFullscreen())
         m_window->showFullScreen();
     else
         m_window->showNormal();
+}
+
+// return the shortest possible locale name for the given locale, describing
+// a unique voices dataset
+QString ApplicationInfo::getVoicesLocale(const QString &locale)
+{
+    QString _locale = locale;
+    if(_locale == GC_DEFAULT_LOCALE) {
+        _locale = QLocale::system().name();
+    }
+    // locales we have country-specific voices for:
+    if (_locale.startsWith("pt_BR") || _locale.startsWith("zh_CN"))
+        return QLocale(_locale).name();
+    // short locale for all the rest:
+    return localeShort(_locale);
 }
 
 QObject *ApplicationInfo::systeminfoProvider(QQmlEngine *engine,

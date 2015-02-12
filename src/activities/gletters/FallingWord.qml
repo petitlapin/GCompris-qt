@@ -42,7 +42,7 @@ Item {
 
     onWon: {
         wonState = true
-        particle.emitter.burst(30)
+        particle.burst(30)
         dropShadow.opacity = 0
         fadeout.restart();
     }
@@ -109,13 +109,13 @@ Item {
         id: wordText
 
         text: ""
-        font.pointSize: 35
+        fontSize: 35
         font.bold: true
         color: "navy"
         style: Text.Outline
         styleColor: "white"
 
-        ParticleSystemStar {
+        ParticleSystemStarLoader {
             id: particle
             clip: false
         }
@@ -126,8 +126,8 @@ Item {
             anchors.fill: parent
 
             text: ""
-            font.pointSize: parent.font.pointSize
-            font.bold: parent.font.pointSize
+            fontSize: parent.fontSize
+            font.bold: parent.font.bold
             color: "red"
             style: Text.Outline
             styleColor: "white"
@@ -155,6 +155,7 @@ Item {
 
         onStopped: {
             Activity.audioCrashPlay();
+            Activity.appendRandomWord(word.text)
             Activity.deleteWord(word);
         }
     }

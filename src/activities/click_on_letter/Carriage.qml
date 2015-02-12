@@ -63,6 +63,7 @@ Image {
         z: 11
 
         text: letter
+        font.pointSize: NaN  // need to clear font.pointSize explicitly 
         font.pixelSize: parent.width * 0.65
         font.bold: true
         style: Text.Outline
@@ -89,14 +90,14 @@ Image {
         onClicked: {
             if (Activity.checkAnswer(index)) {
                 successAnimation.restart();
-                particle.emitter.burst(30)
+                particle.burst(30)
             } else {
                 failureAnimation.restart()
             }
         }
     }
 
-    ParticleSystemStar {
+    ParticleSystemStarLoader {
         id: particle
         clip: false
     }

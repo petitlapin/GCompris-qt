@@ -32,19 +32,22 @@ Image {
     property string question
     property bool playAudioOnError: false
 
+    function select() {
+        if(question === Activity.getCurrentTextQuestion()) {
+            particles.burst(40)
+            animWin.start()
+            Activity.nextQuestion()
+        } else {
+            if(audioSrc && item.playAudioOnError) {
+                item.audioVoices.play(audioSrc)
+            }
+            crossAnim.start()
+        }
+    }
+
     MouseArea {
         anchors.fill: parent
-        onClicked: {
-            if(question === Activity.getCurrentTextQuestion()) {
-                particles.emitter.burst(40)
-                Activity.nextQuestion()
-            } else {
-                if(audioSrc && item.playAudioOnError) {
-                    item.audioVoices.play(audioSrc)
-                }
-                crossAnim.start()
-            }
-        }
+        onClicked: select()
     }
 
     SequentialAnimation {
@@ -65,7 +68,21 @@ Image {
               duration: 400 + Math.floor(Math.random() * 400)
               easing.type: Easing.InOutQuad }
     }
-    ParticleSystemStar {
+
+    SequentialAnimation {
+          id: animWin
+          running: false
+          loops: 1
+          NumberAnimation {
+              target: item
+              property: "rotation"
+              from: 0; to: 360
+              duration: 600
+              easing.type: Easing.InOutQuad
+          }
+    }
+
+    ParticleSystemStarLoader {
         id: particles
         clip: false
     }

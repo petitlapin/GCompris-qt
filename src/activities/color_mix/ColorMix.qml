@@ -37,7 +37,7 @@ ActivityBase {
 
     pageComponent: Image {
         id: background
-        source: Activity.url + (modeRGB ? "background.svgz" : "background2.svgz")
+        source: Activity.url + (modeRGB ? "background.svg" : "background2.svg")
         sourceSize.width: parent.width
         anchors.fill: parent
         fillMode: Image.PreserveAspectCrop
@@ -94,11 +94,11 @@ ActivityBase {
 
         GCText {
             text: qsTr("Match the color")
-            font.pointSize: 18
+            fontSize: 18
             horizontalAlignment: Text.AlignRight
             wrapMode: Text.WordWrap
             anchors {
-                verticalCenter: target.verticalCenter
+                top: target.top
                 right: target.left
                 left: parent.left
                 rightMargin: items.margins
@@ -108,7 +108,7 @@ ActivityBase {
         GCText {
             id: helpMessage
             text: ""
-            font.pointSize: 16
+            fontSize: mediumSize
             horizontalAlignment: Text.AlignLeft
             wrapMode: Text.WordWrap
             anchors {
@@ -137,6 +137,7 @@ ActivityBase {
         ColorChooser {
             id: color1
             hue: activity.modeRGB ? 0 : 300 / 360 /* red / magenta */
+            source: Activity.url + (activity.modeRGB ? "flashlight-red.svg" : "tube-magenta.svg")
             sourceSize.height: items.chooserHeight
             maxSteps: items.maxSteps
             anchors {
@@ -149,6 +150,7 @@ ActivityBase {
         ColorChooser {
             id: color2
             hue: activity.modeRGB ? 120 / 360 : 60 / 360 /* green / yellow */
+            source: Activity.url + (activity.modeRGB ? "flashlight-green.svg" : "tube-yellow.svg")
             sourceSize.height: items.chooserHeight
             maxSteps: items.maxSteps
             anchors {
@@ -162,6 +164,7 @@ ActivityBase {
         ColorChooser {
             id: color3
             hue: activity.modeRGB ? 240 / 360 : 180 / 360 /* blue / cyan */
+            source: Activity.url + (activity.modeRGB ? "flashlight-blue.svg" : "tube-cyan.svg")
             sourceSize.height: items.chooserHeight
             maxSteps: items.maxSteps
             anchors {
@@ -221,7 +224,7 @@ ActivityBase {
                 helpMessage.text = message
 
                 if (message === "") {
-                    bonus.good("tux")
+                    bonus.good("gnu")
                     helpMessage.text = ""
                 }
             }

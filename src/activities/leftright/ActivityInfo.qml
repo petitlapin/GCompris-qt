@@ -2,10 +2,10 @@ import GCompris 1.0
 
 ActivityInfo {
     name: "leftright/Leftright.qml"
-    difficulty: 1
+    difficulty: 2
     icon: "leftright/leftright.svg"
     author: "Bruno Coudoin <bruno.coudoin@gcompris.net>"
-    demo: true
+    demo: false
     title: qsTr("Find your left and right hands")
     description: qsTr("Determine if a hand is a right or a left hand")
 //  intro: "Guess if the picture presents a left or right hand and click on the correct answer."

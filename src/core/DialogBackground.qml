@@ -70,7 +70,7 @@ Rectangle {
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                     color: "black"
-                    font.pointSize: 20
+                    fontSize: 20
                     font.weight: Font.DemiBold
                     wrapMode: Text.WordWrap
                 }
@@ -98,7 +98,7 @@ Rectangle {
                         text: content
                         width: flick.width
                         height: flick.height
-                        font.pointSize: 14
+                        fontSize: regularSize
                         wrapMode: TextEdit.Wrap
                         textFormat: TextEdit.RichText
                         onLinkActivated: Qt.openUrlExternally(link)
@@ -110,37 +110,8 @@ Rectangle {
     }
 
     // The cancel button
-    Image {
-        id: cancel
-        source: "qrc:/gcompris/src/core/resource/cancel.svgz";
-        fillMode: Image.PreserveAspectFit
-        anchors.right: parent.right
-        anchors.top: parent.top
-        smooth: true
-        sourceSize.width: 60 * ApplicationInfo.ratio
-        anchors.margins: 10
-        SequentialAnimation {
-              id: anim
-              running: true
-              loops: Animation.Infinite
-              NumberAnimation {
-                  target: cancel
-                  property: "rotation"
-                  from: -10; to: 10
-                  duration: 500
-                  easing.type: Easing.InOutQuad
-              }
-              NumberAnimation {
-                  target: cancel
-                  property: "rotation"
-                  from: 10; to: -10
-                  duration: 500
-                  easing.type: Easing.InOutQuad }
-          }
-        MouseArea {
-            anchors.fill: parent
-            onClicked: close()
-        }
+    GCButtonCancel {
+        onClose: parent.close()
     }
 
 }

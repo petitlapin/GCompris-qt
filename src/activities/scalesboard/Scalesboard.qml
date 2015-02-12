@@ -24,6 +24,7 @@ import GCompris 1.0
 
 import "../../core"
 import "scalesboard.js" as Activity
+import "."
 
 ActivityBase {
     id: activity
@@ -73,7 +74,8 @@ ActivityBase {
         onStop: { Activity.stop() }
 
         onScaleHeightChanged: Activity.initCompleted && scaleHeight == 0 && question.hasText == "" ?
-                                  bonus.good("flower") : null
+                                  bonus.good("flower") :
+                                  activity.audioEffects.play('qrc:/gcompris/src/activities/erase/resource/eraser2.wav')
 
         Image {
             id: scale
@@ -145,6 +147,7 @@ ActivityBase {
                 masseAreaRight: masseAreaRight
                 nbColumns: 3
                 dropEnabled: true
+                audioEffects: activity.audioEffects
 
                 Behavior on anchors.verticalCenterOffset {
                     NumberAnimation {
@@ -191,6 +194,7 @@ ActivityBase {
                 masseAreaRight: masseAreaRight
                 nbColumns: 3
                 dropEnabled: items.dataset[bar.level - 1].rightDrop
+                audioEffects: activity.audioEffects
 
                 Behavior on anchors.verticalCenterOffset {
                     NumberAnimation {
@@ -213,6 +217,7 @@ ActivityBase {
             masseAreaRight: masseAreaRight
             nbColumns: masseModel.count
             dropEnabled: true
+            audioEffects: activity.audioEffects
         }
 
 
@@ -231,7 +236,7 @@ ActivityBase {
         Question {
             id: question
             parent: scale
-            x: parent.x
+            anchors.horizontalCenter: parent.horizontalCenter
             y: parent.height * 0.45
             z: 1000
             width: parent.width - y
@@ -273,7 +278,7 @@ ActivityBase {
             onAnswerChanged: question.userEntry = answer
             maxDigit: ('' + items.giftWeight).length + 1
             opacity: question.displayed ? 1 : 0
-            columnWidth: 60
+            columnWidth: 60 * ApplicationInfo.ratio
         }
 
         Keys.onPressed: {

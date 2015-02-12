@@ -24,10 +24,11 @@ import QtQuick.Controls.Styles 1.0
 import GCompris 1.0
 
 ButtonStyle {
-    property int textWidth: 200
+    property real fixedFontSize: -1   // set to a value > 0 for forcing a fixed
+                                      // font.pointSize for the label, that
+                                      // won't be updated with baseFontSize
+
     background: Rectangle {
-        implicitWidth: textWidth // 10 * control.text.length
-        implicitHeight: 50 * ApplicationInfo.ratio
         border.width: control.activeFocus ? 4 : 2
         border.color: "black"
         radius: 10
@@ -37,12 +38,25 @@ ButtonStyle {
         }
     }
     label: Item {
+        id: labelItem
         anchors.fill: parent
+        implicitWidth: labelText.implicitWidth
+        implicitHeight: labelText.implicitHeight
+
         GCText {
+            id: labelText
             text: control.text
+            fontSize: regularSize
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
             wrapMode: Text.WordWrap
+
+            Component.onCompleted: {
+                if (fixedFontSize > 0) {
+                    labelText.fixFontSize = true;
+                    labelText.fontSize = fixedFontSize;
+                }
+            }
         }
     }
 }

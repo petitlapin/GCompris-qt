@@ -21,7 +21,7 @@
 import QtQuick 2.2
 import QtQuick.Controls 1.2
 import QtQuick.Window 2.1
-import QtQuick.Dialogs 1.1
+import QtQml 2.2
 
 import GCompris 1.0
 import "qrc:/gcompris/src/core/core.js" as Core
@@ -33,6 +33,15 @@ Window {
     minimumWidth: 400
     minimumHeight: 400
     title: "GCompris"
+
+    property var applicationState: Qt.application.state
+
+    onApplicationStateChanged: {
+        if (ApplicationInfo.isMobile && applicationState != Qt.ApplicationActive) {
+            audioVoices.stop();
+            audioEffects.stop();
+        }
+    }
 
     onClosing: Core.quit()
 
@@ -83,21 +92,32 @@ Window {
     Component.onCompleted: {
         console.log("enter main.qml (run #" + ApplicationSettings.exeCount
                 + ", ratio=" + ApplicationInfo.ratio
+                + ", fontRatio=" + ApplicationInfo.fontRatio
                 + ", dpi=" + Math.round(Screen.pixelDensity*25.4) + ")");
-        if (ApplicationSettings.exeCount == 1) {
+        if (ApplicationSettings.exeCount == 1 && !ApplicationSettings.isKioskMode) {
             // first run
-            var buttonHandler = new Array();
             var dialog;
-            buttonHandler[StandardButton.Ok] = function() {};
-            dialog = Core.showMessageDialog(main, qsTr("Welcome to GCompris!"),
-                    qsTr("You are running GCompris for the first time."),
-                    qsTr("You should verify that your application settings especially your language is set correctly, and that all language specific sound files are installed. You can do this in the Preferences Dialog.") +
-                    "\n" +
-                    qsTr("Your current locale is '%1'").arg(ApplicationInfo.localeShort) +
-                    "\n" +
-                    qsTr("Have Fun!"),
-                    StandardIcon.Information,
-                    buttonHandler
+            dialog = Core.showMessageDialog(
+                        main,
+                        qsTr("Welcome to GCompris!") + '\n'
+                        + qsTr("You are running GCompris for the first time.") + '\n'
+                        + qsTr("You should verify that your application settings especially your language is set correctly, and that all language specific sound files are installed. You can do this in the Preferences Dialog.")
+                        + "\n"
+                        + qsTr("Have Fun!")
+                        + "\n"
+                        + qsTr("Your current language is %1 (%2).")
+                          .arg(Qt.locale(ApplicationSettings.locale).nativeLanguageName)
+                          .arg(ApplicationSettings.locale)
+                        + "\n"
+                        + qsTr("Do you want to download the corresponding sound files now?"),
+                        "YES",
+                        function() {
+                            if (DownloadManager.downloadResource(
+                                        DownloadManager.getVoicesResourceForLocale(ApplicationSettings.locale)))
+                                var downloadDialog = Core.showDownloadDialog(pageView.currentItem, {});
+                        },
+                        "NO", null,
+                        function() { pageView.currentItem.focus = true }
             );
         }
     }
@@ -105,7 +125,14 @@ Window {
     StackView {
         id: pageView
         anchors.fill: parent
-        initialItem: "qrc:/gcompris/src/activities/" + ActivityInfoTree.rootMenu.name
+        initialItem: {
+            "item": "qrc:/gcompris/src/activities/" + ActivityInfoTree.rootMenu.name,
+            "properties": {
+                'audioVoices': audioVoices,
+                'audioEffects': audioEffects
+            }
+        }
+
         delegate: StackViewDelegate {
             id: root
             function getTransition(properties)
@@ -115,8 +142,6 @@ Window {
                 if(!properties.exitItem.isDialog) {
                     if(!properties.enterItem.isDialog) {
                         playIntroVoice(properties.enterItem.activityInfo.name)
-                        properties.enterItem.audioVoices = audioVoices
-                        properties.enterItem.audioEffects = audioEffects
                     }
                     properties.enterItem.start()
                 }

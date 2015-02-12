@@ -35,7 +35,6 @@ class ActivityInfoTree : public QObject
 public:
 	ActivityInfoTree(QObject *parent = 0);
 	QQmlListProperty<ActivityInfo> menuTree();
-	int menuTreeCount() const;
 	ActivityInfo *getRootMenu() const;
 	void setRootMenu(ActivityInfo *rootMenu);
 	ActivityInfo *menuTree(int) const;
@@ -50,6 +49,7 @@ public:
 
 protected slots:
     Q_INVOKABLE void filterByTag(const QString &tag);
+    Q_INVOKABLE void filterLockedActivities();
 
 signals:
 	void menuTreeChanged();
@@ -61,7 +61,9 @@ private:
     // represents the Menu view and can be filtered
     QList<ActivityInfo *> m_menuTree;
     ActivityInfo *m_rootMenu;
-	ActivityInfo *m_currentActivity;
+    ActivityInfo *m_currentActivity;
+    static int menuTreeCount(QQmlListProperty<ActivityInfo> *property);
+    static ActivityInfo *menuTreeAt(QQmlListProperty<ActivityInfo> *property, int index);
 
 	struct SortByDifficulty
 	{
