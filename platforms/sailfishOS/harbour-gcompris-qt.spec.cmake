@@ -1,7 +1,7 @@
 # -*- rpm-spec -*-
 Summary:        gcompris-qt
 Name:           @GCOMPRIS_EXECUTABLE_NAME@
-Version:        @GCOMPRIS_MAJOR_VERSION@.@GCOMPRIS_MINOR_VERSION@_1
+Version:        @GCOMPRIS_MAJOR_VERSION@.@GCOMPRIS_MINOR_VERSION@
 Release:        1
 License:        GPLv2
 Group:          unknown
@@ -12,7 +12,7 @@ Buildarch: @BUILD_ARCH@
 Prefix: /usr
 
 %define _rpmdir @CMAKE_BINARY_DIR@/_CPack_Packages/Linux/RPM
-%define _rpmfilename gcompris-@GCOMPRIS_MAJOR_VERSION@.@GCOMPRIS_MINOR_VERSION@-Linux.rpm
+%define _rpmfilename harbour-gcompris-qt-@GCOMPRIS_MAJOR_VERSION@.@GCOMPRIS_MINOR_VERSION@-1.@BUILD_ARCH@.rpm
 %define _unpackaged_files_terminate_build 0
 %define _topdir @CMAKE_BINARY_DIR@/_CPack_Packages/Linux/RPM
 
@@ -27,7 +27,7 @@ GCompris is a high quality educational software suite comprising of numerous act
 # We do only save CPack installed tree in _prepr
 # and then restore it in build.
 %prep
-mv $RPM_BUILD_ROOT "@CPACK_TOPLEVEL_DIRECTORY@/tmpBBroot"
+mv $RPM_BUILD_ROOT "@CMAKE_BINARY_DIR@/_CPack_Packages/Linux/RPM/tmpBBroot"
 echo $RPM_BUILD_ROOT
 
 #p build
@@ -37,7 +37,7 @@ if [ -e $RPM_BUILD_ROOT ];
 then
   rm -rf $RPM_BUILD_ROOT
 fi
-mv "@CPACK_TOPLEVEL_DIRECTORY@/tmpBBroot" $RPM_BUILD_ROOT
+mv "@CMAKE_BINARY_DIR@/_CPack_Packages/Linux/RPM/tmpBBroot" $RPM_BUILD_ROOT
 
 # >> macros
 %define _requires_exclude /bin/sh
