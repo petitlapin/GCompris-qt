@@ -79,7 +79,8 @@ public:
 		MacOSX,
         Android,
         Ios,
-        Blackberry
+        Blackberry,
+        SailfishOS
     };
 
     ApplicationInfo(QObject *parent = 0);

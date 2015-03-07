@@ -60,7 +60,7 @@ ApplicationInfo::ApplicationInfo(QObject *parent): QObject(parent)
 {
 
     m_isMobile = false;
-#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_BLACKBERRY)
+#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_BLACKBERRY) || defined(SAILFISHOS)
     m_isMobile = true;
 #endif
 
@@ -76,6 +76,8 @@ ApplicationInfo::ApplicationInfo(QObject *parent): QObject(parent)
     m_platform = Ios;
 #elif defined(Q_OS_BLACKBERRY)
     m_platform = Blackberry;
+#elif defined(SAILFISHOS)
+    m_platform = SailfishOS;
 #endif
 
     QRect rect = qApp->primaryScreen()->geometry();
