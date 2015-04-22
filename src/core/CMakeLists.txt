@@ -10,6 +10,10 @@ if(WITH_KIOSK_MODE)
   add_definitions(-DWITH_KIOSK_MODE)
 endif()
 
+if(SAILFISHOS)
+  add_definitions(-DSAILFISHOS)
+endif()
+
 # Note: put .cpp files before .h files in the following or cmake messes up
 # moc generation -- WTF! 
 set(gcompris_SRCS
@@ -219,17 +223,20 @@ if(APPLE)
   set(CPACK_DMG_BACKGROUND_IMAGE "${GCOMPRIS_RESOURCES}/dmg_background.png")
 elseif(WIN32)
   set(CPACK_GENERATOR "NSIS")
-elseif(BUILD_RPM)
-  install(FILES ${PROJECT_SOURCE_DIR}/installer/harbour-gcompris-qt.desktop DESTINATION share/applications)
-  install(FILES ${PROJECT_SOURCE_DIR}/installer/harbour-gcompris-qt.png DESTINATION share/icons/hicolor/86x86/apps)
+elseif(SAILFISHOS)
+  configure_file(${PROJECT_SOURCE_DIR}/platforms/sailfishOS/harbour-gcompris-qt.spec.cmake ${CMAKE_BINARY_DIR}/harbour-gcompris-qt.spec @ONLY)
+
+  install(FILES ${PROJECT_SOURCE_DIR}/platforms/sailfishOS/harbour-gcompris-qt.desktop DESTINATION share/applications)
+  install(FILES ${PROJECT_SOURCE_DIR}/platforms/sailfishOS/harbour-gcompris-qt.png DESTINATION share/icons/hicolor/86x86/apps)
   set(CPACK_RPM_PACKAGE_SUMMARY "gcompris-qt")
-  set(CPACK_RPM_PACKAGE_ARCHITECTURE "armv7hl")
+  # BUILD_ARCH is either armv7hl or i486
+  set(CPACK_RPM_PACKAGE_ARCHITECTURE "${BUILD_ARCH}")
   set(CPACK_RPM_PACKAGE_NAME "${GCOMPRIS_EXECUTABLE_NAME}")
   set(CPACK_RPM_PACKAGE_VERSION "${GCOMPRIS_VERSION}")
-  set(CPACK_RPM_PACKAGE_LICENSED "GPL-3")
+  set(CPACK_RPM_PACKAGE_LICENSED "GPLv2")
   set(CPACK_RPM_PACKAGE_URL "https://www.gcompris.org")
-  set(CPACK_RPM_PACKAGE_DESCRIPTION "GCompris description")
-  set(CPACK_RPM_USER_BINARY_SPECFILE "${PROJECT_SOURCE_DIR}/installer/harbour-gcompris-qt.spec")
+  set(CPACK_RPM_PACKAGE_DESCRIPTION "GCompris is a high quality educational software suite comprising of numerous activities for children aged 2 to 10.")
+  set(CPACK_RPM_USER_BINARY_SPECFILE "${CMAKE_BINARY_DIR}/harbour-gcompris-qt.spec")
   set(CMAKE_INSTALL_PREFIX "/usr")
   set(CPACK_PACKAGING_INSTALL_PREFIX "/usr")
   set(CPACK_GENERATOR "RPM")
