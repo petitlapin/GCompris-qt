@@ -19,7 +19,7 @@
 *   You should have received a copy of the GNU General Public License
 *   along with this program; if not, see <http://www.gnu.org/licenses/>.
 */
-import QtQuick 2.2
+import QtQuick 2.1
 import GCompris 1.0
 
 import "../../core"
@@ -63,7 +63,6 @@ Item {
         id: touchArea
         anchors.fill: parent
         touchPoints: [ TouchPoint { id: point1 } ]
-        mouseEnabled: true
         property real startX
         property real startY
         property bool started
