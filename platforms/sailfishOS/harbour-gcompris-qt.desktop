@@ -9,5 +9,4 @@ Terminal=false
 Type=Application
 Categories=Education;Game;KidsGame;
 StartupNotify=true
-X-Nemo-Application-Type=silica-qt5
-
+X-Nemo-Application-Type=generic
