@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2013 Digia Plc and/or its subsidiary(-ies).
+** Copyright (C) 2013 Digia Plc and/or its subsidiary(-ies). <qt@digia.org>
 ** Contact: http://www.qt-project.org/legal
 **
 ** This file is part of the examples of the Qt Toolkit.
@@ -36,7 +36,10 @@
 **
 ** $QT_END_LICENSE$
 **
-****************************************************************************/
+***************************************************************************/
+
+#include "ApplicationSettings.h"
+#include "ApplicationInfo.h"
 
 #include <QtCore/qmath.h>
 #include <QtCore/QUrl>
@@ -47,11 +50,10 @@
 
 #include <QSettings>
 #include <QStandardPaths>
-#include "ApplicationSettings.h"
-#include "ApplicationInfo.h"
 #include <QDebug>
 
 #define GC_DEFAULT_FONT "Andika-R.ttf"
+#define GC_DEFAULT_FONT_CAPITALIZATION 0 // Font.MixedCase
 
 static const QString GENERAL_GROUP_KEY = "General";
 static const QString ADMIN_GROUP_KEY = "Admin";
@@ -76,6 +78,7 @@ static const QString FILTER_LEVEL_MIN = "filterLevelMin";
 static const QString FILTER_LEVEL_MAX = "filterLevelMax";
 
 static const QString BASE_FONT_SIZE_KEY = "baseFontSize";
+static const QString FONT_CAPITALIZATION = "fontCapitalization";
 
 static const QString DEFAULT_CURSOR = "defaultCursor";
 static const QString NO_CURSOR = "noCursor";
@@ -106,6 +109,7 @@ ApplicationSettings::ApplicationSettings(QObject *parent): QObject(parent),
             ApplicationInfo::getInstance()->isMobile()).toBool();
     m_locale = m_config.value(LOCALE_KEY, GC_DEFAULT_LOCALE).toString();
     m_font = m_config.value(FONT_KEY, GC_DEFAULT_FONT).toString();
+    m_fontCapitalization = m_config.value(FONT_CAPITALIZATION, GC_DEFAULT_FONT_CAPITALIZATION).toUInt();
     m_isEmbeddedFont = m_config.value(IS_CURRENT_FONT_EMBEDDED, true).toBool();
 
 // The default demo mode based on the platform
@@ -126,7 +130,7 @@ ApplicationSettings::ApplicationSettings(QObject *parent): QObject(parent),
     m_showLockedActivities = m_config.value(SHOW_LOCKED_ACTIVITIES_KEY, m_isDemoMode).toBool();
 	m_sectionVisible = m_config.value(SECTION_VISIBLE, true).toBool();
 	m_isAutomaticDownloadsEnabled = m_config.value(ENABLE_AUTOMATIC_DOWNLOADS,
-            !ApplicationInfo::getInstance()->isMobile()).toBool();
+            !ApplicationInfo::getInstance()->isMobile() && ApplicationInfo::isDownloadAllowed()).toBool();
     m_filterLevelMin = m_config.value(FILTER_LEVEL_MIN, 1).toUInt();
     m_filterLevelMax = m_config.value(FILTER_LEVEL_MAX, 6).toUInt();
 	m_defaultCursor = m_config.value(DEFAULT_CURSOR, false).toBool();
@@ -187,8 +191,9 @@ ApplicationSettings::~ApplicationSettings()
     m_config.setValue(SECTION_VISIBLE, m_sectionVisible);
 	m_config.setValue(DEFAULT_CURSOR, m_defaultCursor);
 	m_config.setValue(NO_CURSOR, m_noCursor);
-	m_config.setValue(BASE_FONT_SIZE_KEY, m_baseFontSize);
-	m_config.endGroup();
+    m_config.setValue(BASE_FONT_SIZE_KEY, m_baseFontSize);
+    m_config.setValue(FONT_CAPITALIZATION, m_fontCapitalization);
+    m_config.endGroup();
 
     // admin group
     m_config.beginGroup(ADMIN_GROUP_KEY);
@@ -241,6 +246,12 @@ void ApplicationSettings::notifyEmbeddedFontChanged()
     qDebug() << "new font is embedded: " << m_isEmbeddedFont;
 }
 
+void ApplicationSettings::notifyFontCapitalizationChanged()
+{
+    updateValueInConfig(GENERAL_GROUP_KEY, FONT_CAPITALIZATION, m_fontCapitalization);
+    qDebug() << "new fontCapitalization: " << m_fontCapitalization;
+}
+
 void ApplicationSettings::notifyFullscreenChanged()
 {
     updateValueInConfig(GENERAL_GROUP_KEY, FULLSCREEN_KEY, m_isFullscreen);
@@ -251,6 +262,16 @@ void ApplicationSettings::notifyVirtualKeyboardChanged()
 {
     updateValueInConfig(GENERAL_GROUP_KEY, VIRTUALKEYBOARD_KEY, m_isVirtualKeyboard);
     qDebug() << "virtualkeyboard set to: " << m_isVirtualKeyboard;
+}
+
+bool ApplicationSettings::isAutomaticDownloadsEnabled() const {
+    return m_isAutomaticDownloadsEnabled && ApplicationInfo::isDownloadAllowed();
+}
+void ApplicationSettings::setIsAutomaticDownloadsEnabled(const bool newIsAutomaticDownloadsEnabled) {
+    if(ApplicationInfo::isDownloadAllowed()) {
+        m_isAutomaticDownloadsEnabled = newIsAutomaticDownloadsEnabled;
+        emit automaticDownloadsEnabledChanged();
+    }
 }
 
 void ApplicationSettings::notifyAutomaticDownloadsEnabledChanged()
@@ -309,6 +330,29 @@ void ApplicationSettings::notifyBarHiddenChanged()
 void ApplicationSettings::saveBaseFontSize()
 {
     updateValueInConfig(GENERAL_GROUP_KEY, BASE_FONT_SIZE_KEY, m_baseFontSize);
+}
+
+void ApplicationSettings::saveActivityConfiguration(const QString &activity, const QVariantMap &data)
+{
+    qDebug() << "save configuration for:" << activity;
+    QMapIterator<QString, QVariant> i(data);
+    while (i.hasNext()) {
+        i.next();
+        updateValueInConfig(activity, i.key(), i.value());
+    }
+}
+
+QVariantMap ApplicationSettings::loadActivityConfiguration(const QString &activity)
+{
+    qDebug() << "load configuration for:" << activity;
+    m_config.beginGroup(activity);
+    QStringList keys = m_config.childKeys();
+    QVariantMap data;
+    foreach(const QString &key, keys) {
+        data[key] = m_config.value(key);
+    }
+    m_config.endGroup();
+    return data;
 }
 
 void ApplicationSettings::setFavorite(const QString &activity, bool favorite)

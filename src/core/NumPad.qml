@@ -1,6 +1,6 @@
 /* GCompris - NumPad.qml
  *
- * Copyright (C) 2014 Aruna Sankaranarayanan
+ * Copyright (C) 2014 Aruna Sankaranarayanan <arunasank@src.gnome.org>
  *
  * Authors:
  *   Aruna Sankaranarayanan <arunasank@src.gnome.org>
@@ -37,6 +37,8 @@ Item {
     property int columnWidth: 80 * ApplicationInfo.ratio
 
     signal answer
+
+    visible: ApplicationSettings.isVirtualKeyboard
 
     Column {
         id: leftPanel

@@ -1,6 +1,6 @@
 /* GCompris - drawnumber.qml
  *
- * Copyright (C) 2014 Emmanuel Charruau
+ * Copyright (C) 2014 Emmanuel Charruau <echarruau@gmail.com>
  *
  * Authors:
  *   Olivier Ponchaut <opvg@mailoo.org> (GTK+ version)
@@ -109,7 +109,7 @@ ActivityBase {
                     sourceSize.height: background.height / 15
                     x: modelData[0] * background.width / 801 - sourceSize.height/2
                     y: modelData[1] * background.height / 521 - sourceSize.height/2
-                    z: items.pointIndexToClick >= index ? 10 : 1
+                    z: items.pointIndexToClick <= index ? 10 : 1
                     visible: index == pointImageRepeater.count - 1 &&
                              items.pointIndexToClick == 0 ? false : true
 
@@ -121,7 +121,7 @@ ActivityBase {
                         id: pointNumberText
 
                         opacity: pointImageOpacity
-                        text: index
+                        text: index + 1
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.verticalCenter: parent.verticalCenter
                         fontSize: 18

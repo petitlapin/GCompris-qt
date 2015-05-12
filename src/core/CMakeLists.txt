@@ -36,10 +36,10 @@ set(gcompris_SRCS
    config.h.in
 )
 
-if(WITH_ACTIVATION_CODE AND ANDROID)
-  list(APPEND gcompris_SRCS ApplicationSettingsAndroid.cpp)
+if(ANDROID)
+  list(APPEND gcompris_SRCS ApplicationAndroid.cpp)
 else()
-  list(APPEND gcompris_SRCS ApplicationSettingsDefault.cpp)
+  list(APPEND gcompris_SRCS ApplicationSettingsDefault.cpp ApplicationInfoDefault.cpp)
 endif()
 
 include_directories(
@@ -56,9 +56,8 @@ if(CMAKE_HOST_WIN32)
   )
 elseif(CMAKE_HOST_APPLE)
   set(gcompris_icon GCompris.icns)
-  set(gcompris_RES
-    ${GCOMPRIS_RESOURCES}/${gcompris_icon}
-  )
+  set(gcompris_RES ${GCOMPRIS_RESOURCES}/${gcompris_icon})
+  set_source_files_properties(${gcompris_RES} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 endif()
 
 if(ANDROID)
@@ -71,7 +70,12 @@ endif()
 
 target_link_libraries(${GCOMPRIS_EXECUTABLE_NAME} ${QT_LIBRARIES})
 
-GCOMPRIS_ADD_RCC(core *.qml *.js resource/*.* resource/bonus/* resource/sounds/* resource/fonts/* qmldir)
+if(CMAKE_HOST_WIN32)
+  # Remove the console for windows
+  set_target_properties(${GCOMPRIS_EXECUTABLE_NAME} PROPERTIES LINK_FLAGS -Wl,-subsystem,windows)
+endif()
+
+GCOMPRIS_ADD_RCC(core *.qml *.js resource/*.${COMPRESSED_AUDIO} resource/*.gif resource/*.png resource/*.svg resource/bonus/* resource/sounds/* resource/fonts/* qmldir)
 
 # Installation
 # ============
@@ -88,7 +92,7 @@ if(BUILD_STANDALONE)
   if(APPLE)
     list(APPEND _qt_plugins Qt5::QTgaPlugin Qt5::QTiffPlugin Qt5::QCocoaIntegrationPlugin)
   elseif(WIN32)
-    list(APPEND _qt_plugins Qt5::QWindowsIntegrationPlugin)
+    list(APPEND _qt_plugins Qt5::QWindowsIntegrationPlugin Qt5::QWindowsAudioPlugin Qt5::AudioCaptureServicePlugin Qt5::DSServicePlugin)
   elseif(UNIX AND NOT ANDROID)
     list(APPEND _qt_plugins Qt5::QXcbIntegrationPlugin)
   endif()
@@ -101,11 +105,15 @@ if(BUILD_STANDALONE)
   endif()
 
   set(_qt_plugins2 imageformats/${_lib_prefix}qsvg)
-  if(UNIX AND NOT ANDROID)
+  if(UNIX AND NOT ANDROID AND NOT APPLE)
     list(APPEND _qt_plugins2 mediaservice/${_lib_prefix}gstaudiodecoder
       mediaservice/${_lib_prefix}gstcamerabin
       mediaservice/${_lib_prefix}gstmediacapture
       mediaservice/${_lib_prefix}gstmediaplayer)
+  elseif(APPLE)
+    list(APPEND _qt_plugins2 mediaservice/${_lib_prefix}qavfmediaplayer
+      mediaservice/${_lib_prefix}qtmedia_audioengine
+      mediaservice/${_lib_prefix}qavfcamera)
   endif()
 
   set(_qml_plugins
@@ -129,14 +137,14 @@ if(BUILD_STANDALONE)
     set(_qt_qml_destdir ${_app}/Contents/qml)
     set(GCOMPRIS_BUNDLE "\${CMAKE_INSTALL_PREFIX}/${_app}")
     set_target_properties(gcompris-qt PROPERTIES
-      MACOSX_BUNDLE_INFO_STRING "${GCOMPRIS_VERSION}, Copyright 2000-2014 Bruno Coudoin and Others"
+      MACOSX_BUNDLE_INFO_STRING "GCompris, Educational game for children 2 to 10"
       MACOSX_BUNDLE_ICON_FILE "${gcompris_icon}"
       MACOSX_BUNDLE_GUI_IDENTIFIER "net.gcompris"
       MACOSX_BUNDLE_LONG_VERSION_STRING "${GCOMPRIS_MAJOR_VERSION}.${GCOMPRIS_MINOR_VERSION}.${GCOMPRIS_PATCH_VERSION}"
       MACOSX_BUNDLE_BUNDLE_NAME "gcompris-qt"
       MACOSX_BUNDLE_SHORT_VERSION_STRING "${GCOMPRIS_VERSION}"
       MACOSX_BUNDLE_BUNDLE_VERSION "${GCOMPRIS_VERSION}"
-      MACOSX_BUNDLE_COPYRIGHT "Copyright 2000-2014 Bruno Coudoin and Others.")
+      MACOSX_BUNDLE_COPYRIGHT "GPL License, Copyright 2000-2015 Bruno Coudoin and Others.")
     set_source_files_properties(${GCOMPRIS_RESOURCES}/${gcompris_icon} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
   else()
     set(_qtconf_destdir bin)
@@ -183,7 +191,7 @@ if(BUILD_STANDALONE)
   install(SCRIPT ${CMAKE_CURRENT_BINARY_DIR}/FixBundle.cmake)
 
   # install a startup script for linux bundle
-  if(UNIX)
+  if(UNIX AND NOT APPLE)
     install(PROGRAMS ../../tools/gcompris-qt.sh DESTINATION bin)
   endif()
 endif(BUILD_STANDALONE)

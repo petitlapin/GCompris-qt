@@ -1,9 +1,9 @@
-/* GCompris - Colors.qml
+/* GCompris - FindIt.qml
+ *
+ * Copyright (C) 2015 Bruno Coudoin <bruno.coudoin@gcompris.net>
  *
  * Original activity in the Gtk+ version of GCompris by
  * Pascal Georges (pascal.georges1@free.fr)
- *
- * Copyright (C) 2014 Bruno Coudoin
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -67,6 +67,7 @@ ActivityBase {
             // On startup we want to queue the first sound but not after
             property bool firstQuestion: true
             property bool audioOk: false
+            property alias score: score
         }
         onStart: Activity.start(items, dataset, mode)
         onStop: Activity.stop()
@@ -162,7 +163,7 @@ ActivityBase {
 
         DropShadow {
             anchors.fill: questionItem
-            cached: true
+            cached: false
             horizontalOffset: 3
             verticalOffset: 3
             radius: 8.0
@@ -190,7 +191,7 @@ ActivityBase {
 
         BarButton {
             id: repeatItem
-            source: "qrc:/gcompris/src/core/resource/bar_repeat.svgz";
+            source: "qrc:/gcompris/src/core/resource/bar_repeat.svg";
             sourceSize.width: 80 * ApplicationInfo.ratio
             z: bar.z + 1
             visible: items.audioOk
@@ -208,6 +209,9 @@ ActivityBase {
             Component.onCompleted: win.connect(Activity.nextLevel)
         }
 
+        Score {
+            id: score
+        }
     }
 
 }

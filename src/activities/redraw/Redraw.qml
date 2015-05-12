@@ -1,6 +1,6 @@
 /* GCompris - redraw.qml
  *
- * Copyright (C) 2014 Bruno Coudoin
+ * Copyright (C) 2014 Bruno Coudoin <bruno.coudoin@gcompris.net>
  *
  * Authors:
  *   Bruno Coudoin <bruno.coudoin@gcompris.net> (GTK+ version)
@@ -201,7 +201,7 @@ ActivityBase {
                         }
                         DropShadow {
                             anchors.fill: text1
-                            cached: true
+                            cached: false
                             horizontalOffset: 1
                             verticalOffset: 1
                             radius: 8.0
@@ -324,7 +324,7 @@ ActivityBase {
                             }
                             DropShadow {
                                 anchors.fill: text2
-                                cached: true
+                                cached: false
                                 horizontalOffset: 1
                                 verticalOffset: 1
                                 radius: 8.0
@@ -373,7 +373,7 @@ ActivityBase {
                             }
                             DropShadow {
                                 anchors.fill: text3
-                                cached: true
+                                cached: false
                                 horizontalOffset: 1
                                 verticalOffset: 1
                                 radius: 8.0

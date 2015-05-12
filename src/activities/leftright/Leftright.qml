@@ -1,6 +1,6 @@
 /* GCompris - Leftright.qml
  *
- * Copyright (C) 2014 Bruno Coudoin
+ * Copyright (C) 2014 Bruno Coudoin <bruno.coudoin@gcompris.net>
  *
  * Authors:
  *   Pascal Georges <pascal.georges1@free.fr> (GTK+ version)
@@ -34,7 +34,7 @@ ActivityBase {
 
     pageComponent: Image {
         id: background
-        source: "qrc:/gcompris/src/activities/leftright/resource/back.svgz"
+        source: "qrc:/gcompris/src/activities/leftright/resource/back.svg"
         sourceSize.width: parent.width
         focus: true
         signal start
@@ -49,6 +49,7 @@ ActivityBase {
             property alias imageAnimOff: imageAnimOff
             property alias leftButton: leftButton
             property alias rightButton: rightButton
+            property alias score: score
         }
 
         Component.onCompleted: {
@@ -70,7 +71,7 @@ ActivityBase {
             fillMode: Image.PreserveAspectFit
             sourceSize.width: Math.min(background.width,
                                        (background.height - leftButton.height - bar.height) * 1.3)
-            source: "qrc:/gcompris/src/activities/leftright/resource/blackboard.svgz"
+            source: "qrc:/gcompris/src/activities/leftright/resource/blackboard.svg"
 
             Image {
                 id: handImage
@@ -83,7 +84,7 @@ ActivityBase {
 
             Image {
                 id: lightImage
-                source: "qrc:/gcompris/src/activities/leftright/resource/light.svgz"
+                source: "qrc:/gcompris/src/activities/leftright/resource/light.svg"
                 sourceSize.width: parent.width
                 sourceSize.height: parent.height
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -178,6 +179,12 @@ ActivityBase {
 
         Bonus {
             id: bonus
+        }
+
+        Score {
+            id: score
+            anchors.top: background.top
+            anchors.bottom: undefined
         }
     }
 }

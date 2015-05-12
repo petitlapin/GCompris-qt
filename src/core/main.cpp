@@ -1,6 +1,6 @@
 /* GCompris - main.cpp
  *
- * Copyright (C) 2014 Bruno Coudoin
+ * Copyright (C) 2014 Bruno Coudoin <bruno.coudoin@gcompris.net>
  *
  * Authors:
  *   Bruno Coudoin <bruno.coudoin@gcompris.net>
@@ -21,7 +21,8 @@
 #include <QtDebug>
 #include <QtGui/QGuiApplication>
 #include <QtQuick/QQuickWindow>
-#include <QtQml>
+#include <QQmlApplicationEngine>
+#include <QStandardPaths>
 #include <QObject>
 #include <QTranslator>
 #include <QCommandLineParser>
@@ -86,6 +87,9 @@ int main(int argc, char *argv[])
 	File::init();
 	DownloadManager::init();
 
+    // Tell media players to stop playing, it's GCompris time
+    ApplicationInfo::getInstance()->requestAudioFocus();
+
     // Must be done after ApplicationSettings is constructed because we get an
     // async callback from the payment system
     ApplicationSettings::getInstance()->checkPayment();
@@ -125,7 +129,7 @@ int main(int argc, char *argv[])
 		}
 		if(!defaultCursor && !parser.isSet(clDefaultCursor))
 			QGuiApplication::setOverrideCursor(
-						QCursor(QPixmap(":/gcompris/src/core/resource/cursor.png"),
+						QCursor(QPixmap(":/gcompris/src/core/resource/cursor.svg"),
 								0, 0));
 
 		// Hide the cursor
@@ -162,8 +166,9 @@ int main(int argc, char *argv[])
 
     // Register voices-resources for current locale, updates/downloads only if
     // not prohibited by the settings
-    DownloadManager::getInstance()->updateResource(DownloadManager::getInstance()
-        ->getVoicesResourceForLocale(locale));
+    if(!DownloadManager::getInstance()->areVoicesRegistered())
+        DownloadManager::getInstance()->updateResource(DownloadManager::getInstance()
+            ->getVoicesResourceForLocale(locale));
 
 	QQmlApplicationEngine engine(QUrl("qrc:/gcompris/src/core/main.qml"));
 	QObject::connect(&engine, SIGNAL(quit()), DownloadManager::getInstance(),
