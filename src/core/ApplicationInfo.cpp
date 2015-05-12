@@ -61,13 +61,15 @@ ApplicationInfo::ApplicationInfo(QObject *parent): QObject(parent)
 {
 
     m_isMobile = false;
-#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_BLACKBERRY)
+#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_BLACKBERRY) || defined (UBUNTU)
     m_isMobile = true;
 #endif
 
 #if defined(Q_OS_ANDROID)
     // Put android before checking linux/unix as it is also a linux
     m_platform = Android;
+#elif defined(UBUNTU)
+    m_platform = Ubuntu;
 #elif (defined(Q_OS_LINUX) || defined(Q_OS_UNIX))
     m_platform = Linux;
 #elif defined(Q_OS_WIN)
