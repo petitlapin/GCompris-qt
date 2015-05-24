@@ -1,6 +1,6 @@
 /* GCompris - braille_fun.js
  *
- * Copyright (C) 2014 Arkit Vora
+ * Copyright (C) 2014 Arkit Vora <arkitvora123@gmail.com>
  *
  * Authors:
  *   Srishti Sethi (GTK+ version)
@@ -40,6 +40,7 @@ function start(items_ ) {
 }
 
 function stop() {
+    items.animateX.stop()
 }
 
 function initQuestion() {

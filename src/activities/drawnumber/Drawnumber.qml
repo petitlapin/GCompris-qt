@@ -105,17 +105,20 @@ ActivityBase {
                 Image {
                     id: pointImage
 
-                    source: Activity.url + "bluepoint.svg"
+                    source: Activity.url + (highlight ?
+                                                (pointImageOpacity ? "bluepoint.svg" : "bluepointHighlight.svg") :
+                                                "greenpoint.svg")
                     sourceSize.height: background.height / 15
                     x: modelData[0] * background.width / 801 - sourceSize.height/2
                     y: modelData[1] * background.height / 521 - sourceSize.height/2
-                    z: items.pointIndexToClick <= index ? 10 : 1
+                    z: items.pointIndexToClick == index ? 1000 : index
                     visible: index == pointImageRepeater.count - 1 &&
                              items.pointIndexToClick == 0 ? false : true
 
                     function drawSegment() {
                         Activity.drawSegment(index)
                     }
+                    property bool highlight: false
 
                     GCText {
                         id: pointNumberText
@@ -130,9 +133,60 @@ ActivityBase {
                         styleColor: "black"
                         color: "white"
                     }
+
+                    ParallelAnimation {
+                        id: anim
+                        running: pointImageOpacity == 0 && items.pointIndexToClick == index
+                        loops: Animation.Infinite
+                        SequentialAnimation {
+                            NumberAnimation {
+                                target: pointImage
+                                property: "rotation"
+                                from: -150; to: 150
+                                duration: 3000
+                                easing.type: Easing.InOutQuad
+                            }
+                            NumberAnimation {
+                                target: pointImage
+                                property: "rotation"
+                                from: 150; to: -150
+                                duration: 3000
+                                easing.type: Easing.InOutQuad
+                            }
+                        }
+                        SequentialAnimation {
+                            NumberAnimation {
+                                target: pointImage
+                                property: "scale"
+                                from: 1; to: 1.5
+                                duration: 1500
+                                easing.type: Easing.InOutQuad
+                            }
+                            NumberAnimation {
+                                target: pointImage
+                                property: "scale"
+                                from: 1.5; to: 1
+                                duration: 1500
+                                easing.type: Easing.InOutQuad
+                            }
+                            NumberAnimation {
+                                target: pointImage
+                                property: "scale"
+                                from: 1; to: 1.5
+                                duration: 1500
+                                easing.type: Easing.InOutQuad
+                            }
+                            NumberAnimation {
+                                target: pointImage
+                                property: "scale"
+                                from: 1.5; to: 1
+                                duration: 1500
+                                easing.type: Easing.InOutQuad
+                            }
+                        }
+                    }
                 }
             }
-
         }
 
         MultiPointTouchArea {
@@ -144,9 +198,13 @@ ActivityBase {
             function checkPoints(touchPoints) {
                 for(var i in touchPoints) {
                     var touch = touchPoints[i]
-                    var part = playArea.childAt(touch.x, touch.y)
-                    if(part) {
-                        part.drawSegment()
+                    for(var p = 0; p < pointImageRepeater.count; p++) {
+                        var part = pointImageRepeater.itemAt(p)
+                        // Could not make it work with the item.contains() api
+                        if(touch.x > part.x && touch.x < part.x + part.width &&
+                           touch.y > part.y && touch.y < part.y + part.height) {
+                            part.drawSegment()
+                        }
                     }
                 }
 

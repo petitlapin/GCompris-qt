@@ -25,7 +25,7 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="1366"
-     inkscape:window-height="768"
+     inkscape:window-height="748"
      id="namedview13"
      showgrid="false"
      fit-margin-top="0"
@@ -33,10 +33,10 @@
      fit-margin-right="0"
      fit-margin-bottom="0"
      inkscape:zoom="14.419258"
-     inkscape:cx="15.729648"
+     inkscape:cx="2.9689359"
      inkscape:cy="8.8107562"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-x="-2"
+     inkscape:window-y="-3"
      inkscape:window-maximized="1"
      inkscape:current-layer="layer1-6"
      borderlayer="true" />
@@ -78,20 +78,20 @@
        transform="matrix(-0.84261,0.026204,0.026204,0.84261,119.57,-195.39)"
        style="opacity:1;display:inline">
       <path
-         style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.99997946000000004;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans;opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+         style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#63933e;fill-opacity:1;stroke:none;stroke-width:0.99997946000000004;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans;opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
          d="m 12.428696,1016.5469 c -2.7897632,0.2758 -5.7173707,1.3328 -7.4524778,3.8055 -3.4133994,4.8645 -3.1031276,11.4508 1.5685275,15.2817 4.6716573,3.8309 12.0081943,3.8266 15.4062503,-1.5313 3.235714,-5.1019 3.140405,-11.5753 -1.53125,-15.4062 -2.335828,-1.9154 -5.201287,-2.4255 -7.99105,-2.1497 z m -0.479277,1.1001 c 2.533001,-0.2505 5.485832,0.5467 7.612712,2.2907 4.253761,3.4883 3.17009,11.1991 1.302288,13.3036 -3.65161,4.1144 -9.245577,4.7645 -13.4993361,1.2762 -3.5265103,-3.9223 -4.7965483,-8.9252 -1.3083156,-13.179 1.7441163,-2.1268 3.3596507,-3.441 5.8926517,-3.6915 z"
          id="path3769-2-9"
          inkscape:connector-curvature="0"
          sodipodi:nodetypes="ssssssscsccs" />
       <path
          sodipodi:type="arc"
-         style="fill:#10ff00;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.86922668999999986;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         style="fill:#85c751;fill-opacity:1;fill-rule:nonzero;stroke:#63933e;stroke-width:0.86922668999999986;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
          id="path5116"
          sodipodi:cx="8.7036381"
          sodipodi:cy="8.7607336"
          sodipodi:rx="8.6342859"
          sodipodi:ry="8.6342859"
-         d="m 17.337924,8.7607336 a 8.6342859,8.6342859 0 1 1 -17.26857185,0 8.6342859,8.6342859 0 1 1 17.26857185,0 z"
+         d="m 17.337924,8.7607336 c 0,4.7685844 -3.865701,8.6342864 -8.6342859,8.6342864 -4.7685845,0 -8.63428595,-3.865702 -8.63428595,-8.6342864 0,-4.7685844 3.86570145,-8.63428592 8.63428595,-8.63428592 4.7685849,0 8.6342859,3.86570152 8.6342859,8.63428592 z"
          transform="matrix(-1.161834,0.03613142,0.03539102,1.138026,23.470545,1016.9995)" />
     </g>
   </g>
@@ -110,7 +110,7 @@
             <dc:title>Openclipart</dc:title>
           </cc:Agent>
         </dc:publisher>
-        <dc:title></dc:title>
+        <dc:title />
         <dc:date>2012-03-23T13:52:34</dc:date>
         <dc:description>Map, Marker, Pin, Pushpin, clip art, clipart, green, </dc:description>
         <dc:source>http://openclipart.org/detail/169048/green-map-marker-by-mightyman</dc:source>

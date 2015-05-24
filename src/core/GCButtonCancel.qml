@@ -19,7 +19,7 @@
  *   along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 import QtQuick 2.2
-import QtQuick.Controls 1.1
+import QtQuick.Controls 1.0
 import GCompris 1.0
 
 /**
@@ -31,7 +31,6 @@ import GCompris 1.0
 Image {
     id: cancel
     source: "qrc:/gcompris/src/core/resource/cancel.svg";
-    fillMode: Image.PreserveAspectFit
     anchors.right: parent.right
     anchors.top: parent.top
     smooth: true

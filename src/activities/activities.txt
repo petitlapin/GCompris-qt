@@ -39,6 +39,7 @@ guessnumber
 hanoi
 hanoi_real
 hexagon
+simplepaint
 imageid
 instruments
 intro_gravity
@@ -89,6 +90,7 @@ scalesboard_weight_avoirdupois
 smallnumbers
 smallnumbers2
 sudoku
+superbrain
 target
 tic_tac_toe
 tic_tac_toe_2players

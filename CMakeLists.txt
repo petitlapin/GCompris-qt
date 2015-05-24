@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8.12)
 
 project(gcompris C CXX)
 
@@ -58,6 +58,7 @@ if("${CMAKE_BINARY_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}")
             directory and create a build directory and call \"${CMAKE_COMMAND} <path to the sources>\".")
 endif("${CMAKE_BINARY_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}")
 
+# Sailfish does not provide a recent Qt version
 if(SAILFISHOS)
   set(QT_REQUIRED_VERSION 5.2.2)
 else()
@@ -66,6 +67,13 @@ endif()
 
 find_package(Qt5 ${QT_REQUIRED_VERSION} REQUIRED
             Qml Quick Gui Multimedia Core Svg Xml XmlPatterns LinguistTools)
+
+find_package (KF5 QUIET COMPONENTS
+    DocTools
+)
+if(KF5_FOUND)
+    include(KDEInstallDirs)
+endif(KF5_FOUND)
 
 #get_cmake_property(_variableNames VARIABLES)
 #foreach (_variableName ${_variableNames})
@@ -218,5 +226,20 @@ add_custom_target(
   DEPENDS ${AAC_FILES}
   )
 
+set(ARCHIVE_NAME ${CMAKE_PROJECT_NAME}-${GCOMPRIS_VERSION})
+add_custom_target(dist
+    COMMAND git archive --prefix=${ARCHIVE_NAME}/ HEAD
+        | bzip2 > ${CMAKE_BINARY_DIR}/${ARCHIVE_NAME}.tar.bz2
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+
 add_subdirectory(src)
+
+if(KF5_FOUND)
+    add_subdirectory(docs/docbook)
+endif(KF5_FOUND)
+
+if(SAILFISHOS)
+  # Need to be done at the end, after src
+  add_subdirectory(platforms/sailfishOS)
+endif()
 
