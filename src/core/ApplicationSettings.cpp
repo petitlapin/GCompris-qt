@@ -91,11 +91,13 @@ ApplicationSettings *ApplicationSettings::m_instance = NULL;
 #ifdef UBUNTU
 ApplicationSettings::ApplicationSettings(QObject *parent): QObject(parent),
 	 m_config(QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) +
-			  GCOMPRIS_APPLICATION_NAME + ".conf", QSettings::IniFormat)
+                  GCOMPRIS_APPLICATION_NAME + ".conf", QSettings::IniFormat),
 #else
 ApplicationSettings::ApplicationSettings(QObject *parent): QObject(parent),
 	 m_config(QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) +
-			  "/gcompris/" + GCOMPRIS_APPLICATION_NAME + ".conf", QSettings::IniFormat), m_baseFontSizeMin(-7), m_baseFontSizeMax(7)
+                  "/gcompris/" + GCOMPRIS_APPLICATION_NAME + ".conf", QSettings::IniFormat),
+#endif
+         m_baseFontSizeMin(-7), m_baseFontSizeMax(7)
 {
     // initialize from settings file or default
 

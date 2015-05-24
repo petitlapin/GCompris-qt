@@ -332,8 +332,12 @@ inline QUrl DownloadManager::getUrlForFilename(const QString& filename) const
 
 inline QString  DownloadManager::getSystemDownloadPath() const
 {
+#ifdef UBUNTU
     return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) +
         "/" + GCOMPRIS_APPLICATION_NAME;
+#else
+    return QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+#endif
 }
 
 inline QStringList DownloadManager::getSystemResourcePaths() const
