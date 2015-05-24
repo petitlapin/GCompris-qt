@@ -11,5 +11,5 @@
     "maintainer": "Michael Hall <mhall119@ubuntu.com>",
     "name": "@GCOMPRIS_EXECUTABLE_NAME@",
     "title": "gcompris",
-    "version": "@GCOMPRIS_VERSION_CODE@"
+    "version": "@GCOMPRIS_VERSION@"
 }
